@@ -10,7 +10,7 @@ public class LocalSystemArchiveService : IArchiveService
 {
     public Result CheckFiles(List<string> files)
     {
-        List<FileError> errors = new();
+        List<Error> errors = new();
         try
         {
             foreach (var file in files)
@@ -23,10 +23,9 @@ public class LocalSystemArchiveService : IArchiveService
         {
             Console.WriteLine(e);
         }
-
+        
         return errors.Any() ? Result.Failure(errors.ToArray()) : Result.Success();
     }
-
     public WorkingProcess LaunchArchiving(List<string> files)
     {
         var operationId = Guid.NewGuid();
