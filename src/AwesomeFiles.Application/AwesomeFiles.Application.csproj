@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Query\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AwesomeFiles.Domain\AwesomeFiles.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    </ItemGroup>
+
+</Project>

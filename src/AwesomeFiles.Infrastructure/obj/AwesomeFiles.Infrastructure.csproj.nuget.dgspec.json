@@ -1,0 +1,191 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Infrastructure/AwesomeFiles.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/AwesomeFiles.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/AwesomeFiles.Application.csproj",
+        "projectName": "AwesomeFiles.Application",
+        "projectPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/AwesomeFiles.Application.csproj",
+        "packagesPath": "/home/denis/.nuget/packages/",
+        "outputPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/denis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Domain/AwesomeFiles.Domain.csproj": {
+                "projectPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Domain/AwesomeFiles.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.117/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Domain/AwesomeFiles.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Domain/AwesomeFiles.Domain.csproj",
+        "projectName": "AwesomeFiles.Domain",
+        "projectPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Domain/AwesomeFiles.Domain.csproj",
+        "packagesPath": "/home/denis/.nuget/packages/",
+        "outputPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/denis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.117/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Infrastructure/AwesomeFiles.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Infrastructure/AwesomeFiles.Infrastructure.csproj",
+        "projectName": "AwesomeFiles.Infrastructure",
+        "projectPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Infrastructure/AwesomeFiles.Infrastructure.csproj",
+        "packagesPath": "/home/denis/.nuget/packages/",
+        "outputPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/denis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/AwesomeFiles.Application.csproj": {
+                "projectPath": "/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/AwesomeFiles.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.117/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

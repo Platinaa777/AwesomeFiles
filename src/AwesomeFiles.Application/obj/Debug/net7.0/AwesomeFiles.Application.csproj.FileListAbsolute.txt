@@ -1,0 +1,15 @@
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/bin/Debug/net7.0/AwesomeFiles.Application.deps.json
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/bin/Debug/net7.0/AwesomeFiles.Application.dll
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/bin/Debug/net7.0/AwesomeFiles.Application.pdb
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/bin/Debug/net7.0/AwesomeFiles.Domain.dll
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/bin/Debug/net7.0/AwesomeFiles.Domain.pdb
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.csproj.AssemblyReference.cache
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.AssemblyInfoInputs.cache
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.AssemblyInfo.cs
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.csproj.CoreCompileInputs.cache
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.csproj.CopyComplete
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.dll
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/refint/AwesomeFiles.Application.dll
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/AwesomeFiles.Application.pdb
+/home/denis/RiderProjects/AwesomeFiles/src/AwesomeFiles.Application/obj/Debug/net7.0/ref/AwesomeFiles.Application.dll
