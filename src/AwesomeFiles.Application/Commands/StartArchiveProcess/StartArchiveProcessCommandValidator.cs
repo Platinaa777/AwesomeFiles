@@ -7,6 +7,6 @@ public class StartArchiveProcessCommandValidator
 {
     public StartArchiveProcessCommandValidator()
     {
-        RuleFor(x => x.Files).NotEmpty();
+        RuleFor(x => x.Files).NotEmpty().WithMessage("Список файлов не должен быть пуст!");
     }
 }

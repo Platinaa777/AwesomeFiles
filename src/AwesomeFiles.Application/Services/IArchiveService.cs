@@ -1,4 +1,4 @@
-using AwesomeFiles.Domain.Models.WorkingProcessModel;
+using AwesomeFiles.Application.Services.Models;
 using AwesomeFiles.Domain.ResultAbstractions;
 
 namespace AwesomeFiles.Application.Services;
@@ -13,17 +13,18 @@ public interface IArchiveService
     /// Проверка на то что все файлы существуют на устройстве
     /// </summary>
     /// <returns></returns>
-    Result CheckFiles(List<string> files);
+    Result CheckAllFilesExists(List<string> files);
     /// <summary>
     /// Запус архивации
     /// </summary>
-    /// <param name="files"></param>
+    /// <param name="existingFiles">Файлы находящиеся на устройстве</param>
     /// <returns></returns>
-    WorkingProcess LaunchArchiving(List<string> files);
+    ArchiveTask LaunchArchiving(List<string> existingFiles);
+
     /// <summary>
     /// Скачивание из архива и возвращение потока
     /// </summary>
-    /// <param name="process"></param>
+    /// <param name="archiveName">Имя архива</param>
     /// <returns></returns>
-    dynamic DownloadArchive(WorkingProcess process);
+    MemoryStream DownloadArchive(long processId);
 }

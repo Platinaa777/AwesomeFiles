@@ -10,26 +10,27 @@ public class StartArchiveProcessCommandHandler
     : IRequestHandler<StartArchiveProcessCommand, Result<ProcessId>>
 {
     private readonly IArchiveService _archiveService;
-    private readonly IWorkingProcessRepository _processRepository;
+    private readonly IArchiveProcessRepository _processRepository;
 
     public StartArchiveProcessCommandHandler(
         IArchiveService archiveService,
-        IWorkingProcessRepository processRepository)
+        IArchiveProcessRepository processRepository)
     {
         _archiveService = archiveService;
         _processRepository = processRepository;
     }
     
-    public async Task<Result<ProcessId>> Handle(StartArchiveProcessCommand request, CancellationToken cancellationToken)
+    public Task<Result<ProcessId>> Handle(StartArchiveProcessCommand request, CancellationToken cancellationToken)
     {
         // Проверяем что файлы все существуют в системе
-        var result = _archiveService.CheckFiles(request.Files);
+        var result = _archiveService.CheckAllFilesExists(request.Files);
         if (result.IsFailure)
-            return Result.Failure<ProcessId>(result.Errors.ToArray());
+            return Task.FromResult(Result.Failure<ProcessId>(result.Errors.ToArray()));
 
         var archiveTask = _archiveService.LaunchArchiving(request.Files);
 
+        _processRepository.AddWithId(archiveTask.ProcessId, archiveTask.WorkItem);
 
-        return Result.Success(new ProcessId("das"));
+        return Task.FromResult(Result.Success(new ProcessId(archiveTask.ProcessId)));
     }
 }

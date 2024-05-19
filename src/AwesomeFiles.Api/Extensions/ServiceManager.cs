@@ -1,4 +1,5 @@
 using System.Reflection;
+using AwesomeFiles.Api.Middlewares;
 using AwesomeFiles.Application.AssemblyInfo;
 using AwesomeFiles.Application.Behavior;
 using AwesomeFiles.Application.Commands.StartArchiveProcess;
@@ -43,12 +44,38 @@ public static class ServiceManager
                 ApplicationAssembly.Assembly));
 
         services
-            .AddSingleton<IWorkingProcessRepository, WorkingProcessRepository>()
-            .AddSingleton<IArchiveFileRepository, AchiveFileRepository>();
+            .AddSingleton<IArchiveProcessRepository, ArchiveProcessRepository>()
+            .AddSingleton<IArchiveFileRepository, LocalSystemArchiveFileRepository>();
 
         services
             .AddScoped<IArchiveService, LocalSystemArchiveService>();
         
         return services;
-    } 
+    }
+
+    public static WebApplicationBuilder ConfigureArchiveStorage(this WebApplicationBuilder builder)
+    {
+        // Проверка на хранение файлов в хранилище правда, из условия я так понимаю оно всегда должно быть создано уже 
+        // с заранее заготовленными файлами, но оставлю как есть
+        if (!Directory.Exists("../../storage"))
+            Directory.CreateDirectory("../../storage");
+        
+        // Создание хранилища архивов c нуля (как указано в задании)
+        if (Directory.Exists("../../archive"))
+        {
+            Directory.Delete("../../archive", recursive: true);
+            Directory.CreateDirectory("../../archive");
+        }
+
+        return builder;
+    }
+    
+    public static IServiceCollection AddCustomMiddlewares(this IServiceCollection services)
+    {
+        services
+            .AddSingleton<ExceptionMiddleware>()
+            .AddSingleton<RequestLoggingMiddleware>();
+
+        return services;
+    }
 }

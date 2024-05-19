@@ -2,12 +2,10 @@ namespace AwesomeFiles.Domain.Models.ArchiveFileModel;
 
 public class ArchiveFile
 {
-    public ArchiveFile(string id, string path)
+    public ArchiveFile(string name)
     {
-        Id = id;
-        Path = path;
+        Name = name;
     }
     
-    public string Id { get; init; }
-    public string Path { get; init; }
+    public string Name { get; init; }
 }

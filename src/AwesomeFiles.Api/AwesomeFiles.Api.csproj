@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.19"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
@@ -16,10 +17,6 @@
       <ProjectReference Include="..\AwesomeFiles.Application\AwesomeFiles.Application.csproj" />
       <ProjectReference Include="..\AwesomeFiles.HttpModels\AwesomeFiles.HttpModels.csproj" />
       <ProjectReference Include="..\AwesomeFiles.Infrastructure\AwesomeFiles.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Middlewares\" />
     </ItemGroup>
 
 </Project>

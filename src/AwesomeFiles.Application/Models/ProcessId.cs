@@ -1,3 +1,3 @@
 namespace AwesomeFiles.Application.Models;
 
-public record ProcessId(string Value);
+public record ProcessId(long Value);

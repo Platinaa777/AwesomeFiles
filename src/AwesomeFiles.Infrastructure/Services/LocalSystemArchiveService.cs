@@ -1,53 +1,79 @@
-using System.Diagnostics;
+using System.IO.Compression;
 using AwesomeFiles.Application.Services;
+using AwesomeFiles.Application.Services.Models;
 using AwesomeFiles.Domain.Errors;
-using AwesomeFiles.Domain.Models.WorkingProcessModel;
+using AwesomeFiles.Domain.Exceptions;
 using AwesomeFiles.Domain.ResultAbstractions;
+using AwesomeFiles.Infrastructure.Constants;
+using ZipFile = System.IO.Compression.ZipFile;
 
 namespace AwesomeFiles.Infrastructure.Services;
 
 public class LocalSystemArchiveService : IArchiveService
 {
-    public Result CheckFiles(List<string> files)
+    private static long _counter;
+    
+    public Result CheckAllFilesExists(List<string> files)
     {
         List<Error> errors = new();
         try
         {
             foreach (var file in files)
             {
-                if (!File.Exists(file))
+                if (!File.Exists(Path.Combine(FileSystemStorageConstants.StorageFolder, file)))
                     errors.Add(FileError.AddFileNotExistsError(file));
             }
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        
+        catch { /* ignored */ }
+
         return errors.Any() ? Result.Failure(errors.ToArray()) : Result.Success();
     }
-    public WorkingProcess LaunchArchiving(List<string> files)
+    
+    public ArchiveTask LaunchArchiving(List<string> existingFiles)
     {
-        var operationId = Guid.NewGuid();
-        // args[0]: Путь где будем архивировать (хранилище)
-        // args[1]: Название самого архива
-        
-        // Раз в задании сказано, что нужно возвращать Id процесса. Я спроектировал
-        // так, что каждый запущенный нами процесс создает новый уникальный архив
-        // для этого будет нужен operationId:Guid
-        // Id - for client side
-        // OperationId - for my backend
-        List<string> args = new() { "../../storage", $"archive-{operationId}" };
-        foreach (var file in files)
-            args.Add(file);
-        
-        var process = Process.Start("./archive-script.sh", args);
-        
-        return new WorkingProcess(process.Id, operationId, process);
+        var processId = Interlocked.Add(ref _counter, 1);
+
+        // Запуск асинхронной архивации файлов
+        var task = Task.Run(() =>
+        {
+            var curArchiveFolder = Path.Combine(FileSystemStorageConstants.ArchiveFolder, $"archive-{processId}");
+            var zipFile = curArchiveFolder + ".zip";
+            // Запуск архивации файлов
+            CreateZipFromFiles(zipFile, existingFiles.ToArray());
+        });
+
+        return new ArchiveTask { ProcessId = processId, WorkItem = task };
     }
 
-    public dynamic DownloadArchive(WorkingProcess process)
+    public MemoryStream DownloadArchive(long processId)
     {
-        throw new NotImplementedException();
+        var archivePath = Path.Combine(FileSystemStorageConstants.ArchiveFolder, $"archive-{processId}.zip");
+        if (!File.Exists(archivePath))
+            throw new ArchiveNotFoundException($"Архив с названием {processId} не был найден"); 
+
+        var memory = new MemoryStream();
+        using (var stream = new FileStream(archivePath, FileMode.Open, FileAccess.Read))
+        {
+            stream.CopyTo(memory);
+        }
+        memory.Position = 0;
+        
+        return memory;
+    }
+    
+    private void CreateZipFromFiles(string zipFilePath, string[] filePaths)
+    {
+        try
+        {
+            using var zip = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
+            foreach (var file in filePaths)
+                zip.CreateEntryFromFile(Path.Combine(FileSystemStorageConstants.StorageFolder, file), file);
+        }
+        catch (Exception)
+        {
+            // случай когда кто-то удалил файл из storage, но при этом прошла проверка через 
+            // метод CheckAllFilesExists
+            throw new ArchiveFileException("Файл из списка был удален");
+        }
     }
 }
