@@ -24,7 +24,7 @@ public interface IArchiveService
     /// <summary>
     /// Скачивание из архива и возвращение потока
     /// </summary>
-    /// <param name="archiveName">Имя архива</param>
+    /// <param name="processId"></param>
     /// <returns></returns>
-    MemoryStream DownloadArchive(long processId);
+    Task<byte[]> DownloadArchiveAsync(long processId);
 }

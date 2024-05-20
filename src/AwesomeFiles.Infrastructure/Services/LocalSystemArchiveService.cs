@@ -45,20 +45,14 @@ public class LocalSystemArchiveService : IArchiveService
         return new ArchiveTask { ProcessId = processId, WorkItem = task };
     }
 
-    public MemoryStream DownloadArchive(long processId)
+    public async Task<byte[]> DownloadArchiveAsync(long processId)
     {
         var archivePath = Path.Combine(FileSystemStorageConstants.ArchiveFolder, $"archive-{processId}.zip");
         if (!File.Exists(archivePath))
-            throw new ArchiveNotFoundException($"Архив с названием {processId} не был найден"); 
-
-        var memory = new MemoryStream();
-        using (var stream = new FileStream(archivePath, FileMode.Open, FileAccess.Read))
-        {
-            stream.CopyTo(memory);
-        }
-        memory.Position = 0;
+            throw new ArchiveNotFoundException($"Архив с названием {processId} не был найден");
         
-        return memory;
+        var bytes = await File.ReadAllBytesAsync(archivePath);
+        return bytes;
     }
     
     private void CreateZipFromFiles(string zipFilePath, string[] filePaths)

@@ -3,21 +3,23 @@ using AwesomeFiles.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
+var configuration = builder.Configuration;
 
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
 builder.Services
-    .AddApiLogging()
+    .AddApiLogging(configuration)
     .AddApplicationServices()
-    .AddCustomMiddlewares();
+    .AddCustomMiddlewares()
+    .AddCaching();
 
 builder.ConfigureArchiveStorage();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("DOCKER_RUNNING"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();

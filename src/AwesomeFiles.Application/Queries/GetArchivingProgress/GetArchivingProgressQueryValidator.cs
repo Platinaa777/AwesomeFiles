@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace AwesomeFiles.Application.Query.GetArchivingProgress;
+namespace AwesomeFiles.Application.Queries.GetArchivingProgress;
 
 public class GetArchivingProgressQueryValidator
     : AbstractValidator<GetArchivingProgressQuery>

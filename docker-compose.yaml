@@ -1,0 +1,23 @@
+version: '3.9'
+
+networks:
+  kaspersky:
+    driver: bridge
+
+services:
+  postgres_db:
+    container_name: kaspersky-log-db
+    image: postgres:12
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: denis
+      POSTGRES_PASSWORD: denis123
+      POSTGRES_DB: logs_db
+    networks: [ kaspersky ]
+    volumes:
+      - kaspersky:/var/lib/postgresql/data
+
+volumes:
+  kaspersky:
+  

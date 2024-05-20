@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace AwesomeFiles.Application.Query.DownloadArchive;
+namespace AwesomeFiles.Application.Queries.DownloadArchive;
 
 public class DownloadArhiveQueryValidator
     : AbstractValidator<DownloadArchiveQuery>

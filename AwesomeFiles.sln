@@ -10,6 +10,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.Domain", "src\AwesomeFiles.Domain\AwesomeFiles.Domain.csproj", "{C2B68FF4-219E-4CCF-ABF5-FCBA53A4BC82}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{200B5A62-FCE2-4C36-9C68-F4A3F9ED3C13}"
+	ProjectSection(SolutionItems) = preProject
+		archive\archive-1.zip = archive\archive-1.zip
+		storage\file2 = storage\file2
+		storage\file1 = storage\file1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FD38E165-DA08-4061-AFD6-9D4E38611D3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2D80653E-51E6-4091-B27D-593296AD88A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.Application.Tests", "tests\AwesomeFiles.Application.Tests\AwesomeFiles.Application.Tests.csproj", "{8A0B4238-9CA7-4308-A577-96BCDF2BD7D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.Api.Tests", "tests\AwesomeFiles.Api.Tests\AwesomeFiles.Api.Tests.csproj", "{1D9DBDC8-62BC-4D13-8AA5-C911494B9FFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +51,22 @@ Global
 		{C2B68FF4-219E-4CCF-ABF5-FCBA53A4BC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2B68FF4-219E-4CCF-ABF5-FCBA53A4BC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2B68FF4-219E-4CCF-ABF5-FCBA53A4BC82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A0B4238-9CA7-4308-A577-96BCDF2BD7D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0B4238-9CA7-4308-A577-96BCDF2BD7D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0B4238-9CA7-4308-A577-96BCDF2BD7D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0B4238-9CA7-4308-A577-96BCDF2BD7D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D9DBDC8-62BC-4D13-8AA5-C911494B9FFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D9DBDC8-62BC-4D13-8AA5-C911494B9FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D9DBDC8-62BC-4D13-8AA5-C911494B9FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D9DBDC8-62BC-4D13-8AA5-C911494B9FFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6091EA88-2E3C-4C49-A928-BC22286C38A2} = {FD38E165-DA08-4061-AFD6-9D4E38611D3A}
+		{A2D31BBE-A104-4447-B275-2094AB5B3EA6} = {FD38E165-DA08-4061-AFD6-9D4E38611D3A}
+		{C2B68FF4-219E-4CCF-ABF5-FCBA53A4BC82} = {FD38E165-DA08-4061-AFD6-9D4E38611D3A}
+		{AB0A45F6-1BB8-472A-83B9-1FDA8DD64F86} = {FD38E165-DA08-4061-AFD6-9D4E38611D3A}
+		{3993BE46-0AE5-4662-B1B8-0459BED4DA37} = {FD38E165-DA08-4061-AFD6-9D4E38611D3A}
+		{8A0B4238-9CA7-4308-A577-96BCDF2BD7D0} = {2D80653E-51E6-4091-B27D-593296AD88A0}
+		{1D9DBDC8-62BC-4D13-8AA5-C911494B9FFD} = {2D80653E-51E6-4091-B27D-593296AD88A0}
 	EndGlobalSection
 EndGlobal

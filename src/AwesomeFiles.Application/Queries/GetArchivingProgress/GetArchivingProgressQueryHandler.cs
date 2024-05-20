@@ -2,7 +2,7 @@ using AwesomeFiles.Domain.Exceptions;
 using AwesomeFiles.Domain.Models.WorkingProcessModel.Repos;
 using MediatR;
 
-namespace AwesomeFiles.Application.Query.GetArchivingProgress;
+namespace AwesomeFiles.Application.Queries.GetArchivingProgress;
 
 public class GetArchivingProgressQueryHandler
     : IRequestHandler<GetArchivingProgressQuery, bool>

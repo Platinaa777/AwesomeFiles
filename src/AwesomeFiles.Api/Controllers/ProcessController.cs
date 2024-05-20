@@ -1,11 +1,12 @@
 using AutoMapper;
 using AwesomeFiles.Api.Enums;
 using AwesomeFiles.Application.Commands.StartArchiveProcess;
-using AwesomeFiles.Application.Query.DownloadArchive;
-using AwesomeFiles.Application.Query.GetArchivingProgress;
+using AwesomeFiles.Application.Queries.DownloadArchive;
+using AwesomeFiles.Application.Queries.GetArchivingProgress;
 using AwesomeFiles.HttpModels.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using static AwesomeFiles.Api.Enums.ProcessStatus;
 
 namespace AwesomeFiles.Api.Controllers;
@@ -48,7 +49,7 @@ public class ProcessController : ControllerBase
 
         if (!result.IsReady)
             return BadRequest(Pending.ToString());
-
-        return File(result.Stream, "application/zip", $"archieve-{processId}");
+        
+        return File(result.ZipBytes, "application/zip", $"archive-{processId}");
     }
 }

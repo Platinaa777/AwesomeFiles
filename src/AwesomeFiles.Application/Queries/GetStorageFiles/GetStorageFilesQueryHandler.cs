@@ -1,20 +1,20 @@
 using AwesomeFiles.Domain.Models.ArchiveFileModel.Repos;
 using MediatR;
 
-namespace AwesomeFiles.Application.Query.GetStorageFiles;
+namespace AwesomeFiles.Application.Queries.GetStorageFiles;
 
 public class GetStorageFilesQueryHandler
     : IRequestHandler<GetStorageFilesQuery, List<GetStorageFileModel>>
 {
-    private readonly IArchiveFileRepository _archiveFileRepository;
+    private readonly IFileRepository _fileRepository;
 
     public GetStorageFilesQueryHandler(
-        IArchiveFileRepository archiveFileRepository)
+        IFileRepository fileRepository)
     {
-        _archiveFileRepository = archiveFileRepository;
+        _fileRepository = fileRepository;
     }
 
     public Task<List<GetStorageFileModel>> Handle(GetStorageFilesQuery request, CancellationToken cancellationToken)
-        => Task.FromResult(_archiveFileRepository.GetAllFiles()
+        => Task.FromResult(_fileRepository.GetAllFiles()
             .Select(x => new GetStorageFileModel(x.Name)).ToList());
 }

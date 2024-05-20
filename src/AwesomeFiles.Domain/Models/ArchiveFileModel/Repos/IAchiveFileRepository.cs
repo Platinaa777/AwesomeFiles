@@ -1,6 +1,6 @@
 namespace AwesomeFiles.Domain.Models.ArchiveFileModel.Repos;
 
-public interface IArchiveFileRepository
+public interface IFileRepository
 {
-    List<ArchiveFile> GetAllFiles();
+    List<AwesomeFile> GetAllFiles();
 }

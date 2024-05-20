@@ -7,11 +7,11 @@ public class CompletedArchive
         IsReady = isReady;
     }
 
-    public CompletedArchive(MemoryStream stream, bool isReady) : this(isReady)
+    public CompletedArchive(byte[] zipBytes, bool isReady) : this(isReady)
     {
-        Stream = stream;
+        ZipBytes = zipBytes;
         IsReady = isReady;
     }
     public bool IsReady { get; set; }
-    public MemoryStream Stream { get; set; } = null!;
+    public byte[] ZipBytes { get; set; } = null!;
 }

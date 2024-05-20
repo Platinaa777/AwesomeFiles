@@ -1,4 +1,4 @@
-using AwesomeFiles.Application.Query.GetStorageFiles;
+using AwesomeFiles.Application.Queries.GetStorageFiles;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

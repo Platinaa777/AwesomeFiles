@@ -4,7 +4,7 @@ using AwesomeFiles.Domain.Exceptions;
 using AwesomeFiles.Domain.Models.WorkingProcessModel.Repos;
 using MediatR;
 
-namespace AwesomeFiles.Application.Query.DownloadArchive;
+namespace AwesomeFiles.Application.Queries.DownloadArchive;
 
 public class DownloadArchiveQueryHandler
     : IRequestHandler<DownloadArchiveQuery, CompletedArchive>
@@ -20,17 +20,17 @@ public class DownloadArchiveQueryHandler
         _archiveService = archiveService;
     }
     
-    public Task<CompletedArchive> Handle(DownloadArchiveQuery request, CancellationToken cancellationToken)
+    public async Task<CompletedArchive> Handle(DownloadArchiveQuery request, CancellationToken cancellationToken)
     {
         var result = _archiveProcessRepository.GetById(request.ProcessId);
         if (result is null)
             throw new ArchiveNotFoundException($"Архив с id: {request.ProcessId} не был найден");
-        
+
         if (result.Status != TaskStatus.RanToCompletion)
-            return Task.FromResult(new CompletedArchive(false));
+            return new CompletedArchive(false);
 
-        var zipStream = _archiveService.DownloadArchive(request.ProcessId);
+        var zipBytes = await _archiveService.DownloadArchiveAsync(request.ProcessId);
 
-        return Task.FromResult(new CompletedArchive(zipStream, true));
+        return new CompletedArchive(zipBytes, true);
     }
 }

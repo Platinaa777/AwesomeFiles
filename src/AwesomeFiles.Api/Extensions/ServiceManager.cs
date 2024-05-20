@@ -3,6 +3,8 @@ using AwesomeFiles.Api.Middlewares;
 using AwesomeFiles.Application.AssemblyInfo;
 using AwesomeFiles.Application.Behavior;
 using AwesomeFiles.Application.Commands.StartArchiveProcess;
+using AwesomeFiles.Application.Models;
+using AwesomeFiles.Application.Queries.DownloadArchive;
 using AwesomeFiles.Application.Services;
 using AwesomeFiles.Domain.Models.ArchiveFileModel.Repos;
 using AwesomeFiles.Domain.Models.WorkingProcessModel.Repos;
@@ -10,20 +12,38 @@ using AwesomeFiles.Infrastructure.Repositories;
 using AwesomeFiles.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
+using NpgsqlTypes;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.PostgreSQL;
 
 namespace AwesomeFiles.Api.Extensions;
 
 public static class ServiceManager
 {
-    public static IServiceCollection AddApiLogging(this IServiceCollection services) => 
+    public static IServiceCollection AddApiLogging(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+        {
+            { "log", new RenderedMessageColumnWriter() },
+            { "log_template", new MessageTemplateColumnWriter() },
+            { "level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
+            { "request_time", new TimestampColumnWriter(NpgsqlDbType.TimestampTz) },
+            { "props", new LogEventSerializedColumnWriter() }
+        };
+        
         services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-            .WriteTo.Logger(logCfg => logCfg.WriteTo.Console())
+            .WriteTo.Console()
+            .WriteTo.PostgreSQL(configuration.GetConnectionString("Logs")!, "logs", columnWriters, needAutoCreateTable: true)
             .CreateLogger()));
+
+        return services;
+    }
+   
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
@@ -33,7 +53,8 @@ public static class ServiceManager
             cfg.RegisterServicesFromAssemblyContaining<StartArchiveProcessCommand>());
 
         services
-            .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>))
+            .AddTransient(typeof(IPipelineBehavior<DownloadArchiveQuery, CompletedArchive>), typeof(CacheArchiveBehavior));
             
         services.AddValidatorsFromAssembly(
             ApplicationAssembly.Assembly,
@@ -45,7 +66,7 @@ public static class ServiceManager
 
         services
             .AddSingleton<IArchiveProcessRepository, ArchiveProcessRepository>()
-            .AddSingleton<IArchiveFileRepository, LocalSystemArchiveFileRepository>();
+            .AddSingleton<IFileRepository, LocalSystemFileRepository>();
 
         services
             .AddScoped<IArchiveService, LocalSystemArchiveService>();
@@ -76,6 +97,14 @@ public static class ServiceManager
             .AddSingleton<ExceptionMiddleware>()
             .AddSingleton<RequestLoggingMiddleware>();
 
+        return services;
+    }
+    
+    public static IServiceCollection AddCaching(this IServiceCollection services)
+    {
+        // Решил что буду использовать in memory кеш, использование редиса все-таки здесь не слишком оправдано
+        services.AddMemoryCache();
+        
         return services;
     }
 }

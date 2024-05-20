@@ -1,8 +1,8 @@
 namespace AwesomeFiles.Domain.Models.ArchiveFileModel;
 
-public class ArchiveFile
+public class AwesomeFile
 {
-    public ArchiveFile(string name)
+    public AwesomeFile(string name)
     {
         Name = name;
     }

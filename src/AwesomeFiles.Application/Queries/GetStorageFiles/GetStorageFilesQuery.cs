@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace AwesomeFiles.Application.Query.GetStorageFiles;
+namespace AwesomeFiles.Application.Queries.GetStorageFiles;
 
 /// <summary>
 /// Решил что лучше все-таки вынести это как отдельный запрос (query), а не inject'ить все в контроллер,

@@ -4,9 +4,9 @@ using AwesomeFiles.Infrastructure.Constants;
 
 namespace AwesomeFiles.Infrastructure.Repositories;
 
-public class LocalSystemArchiveFileRepository : IArchiveFileRepository
+public class LocalSystemFileRepository : IFileRepository
 {
-    public List<ArchiveFile> GetAllFiles()
+    public List<AwesomeFile> GetAllFiles()
         => Directory.GetFiles(FileSystemStorageConstants.StorageFolder)
-            .Select(fileName => new ArchiveFile(Path.GetFileName(fileName))).ToList();
+            .Select(fileName => new AwesomeFile(Path.GetFileName(fileName))).ToList();
 }
