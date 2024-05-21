@@ -1,6 +1,5 @@
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
-using System.Security.Cryptography;
 using af.Services;
 using af.Utils;
 

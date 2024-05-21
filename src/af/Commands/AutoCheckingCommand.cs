@@ -23,7 +23,7 @@ public class AutoCheckingCommand : Command
 
             // Не смогли создать процесс на архивацию
             if (processId == -1)
-                return;
+                return -1;
 
             var isReady = false;
             do
@@ -31,14 +31,18 @@ public class AutoCheckingCommand : Command
                 var statusCommandExitCode = await new StatusCommand(factory)
                     .InvokeAsync(new []{ processId.ToString() });
                 
+                if (statusCommandExitCode == -1)
+                    return -1;
                 if (statusCommandExitCode == processId)
                     isReady = true;
                 
                 await Task.Delay(200);
             } while (!isReady);
         
-            await new DownloadCommand(factory, fileService)
+            var exitCode = await new DownloadCommand(factory, fileService)
                 .InvokeAsync(new []{ processId.ToString(), path});
+
+            return exitCode;
         });
     }
 }
