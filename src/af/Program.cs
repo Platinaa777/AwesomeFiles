@@ -1,8 +1,5 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Builder;
-using System.CommandLine.Parsing;
-using af.Middlewares;
-using af.Utils;
+using af.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace af;
@@ -13,19 +10,20 @@ public class Af
     {
         var rootCommand = new RootCommand("AwesomeFiles CLI - Консольная утилита для тестирования backend сервиса");
 
-        CLICommands.RegisterHandlers(rootCommand);
-        
-        var builder = new CommandLineBuilder(rootCommand).UseDefaults().UseDependencyInjection(services =>
-        {
-            services.AddHttpClient();
-        });
-        
+        var services = new ServiceCollection();
+        DependencyInjection.ConfigureServices(services);
+
+        await using var serviceProvider = services.BuildServiceProvider();
+
+        var commands = serviceProvider.GetServices<Command>();
+        commands.ToList().ForEach(rootCommand.AddCommand);
+
         while (true)
         {
             Console.Write("> ");
             var input = Console.ReadLine();
             var inputArgs = input!.Split(' ');
-            await builder.Build().InvokeAsync(inputArgs);
+            await rootCommand.InvokeAsync(inputArgs);
         }
     }
 }

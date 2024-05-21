@@ -3,7 +3,7 @@ using af;
 
 namespace AwesomeFiles.CLI.Tests;
 
-public class UnitTest1
+public class СreateArchiveCommandShould
 {
     [Fact]
     public async Task Test1()
