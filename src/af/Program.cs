@@ -1,23 +1,31 @@
 ﻿using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Parsing;
+using af.Middlewares;
 using af.Utils;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace af;
 
-static class Program
+public class Af
 {
-    static async Task Main()
+    public static async Task Main()
     {
         var rootCommand = new RootCommand("AwesomeFiles CLI - Консольная утилита для тестирования backend сервиса");
 
         CLICommands.RegisterHandlers(rootCommand);
-
+        
+        var builder = new CommandLineBuilder(rootCommand).UseDefaults().UseDependencyInjection(services =>
+        {
+            services.AddHttpClient();
+        });
+        
         while (true)
         {
-            // Перехват исключения, например backend не запущен => не сможем отправить HTTP запрос
             Console.Write("> ");
             var input = Console.ReadLine();
             var inputArgs = input!.Split(' ');
-            await rootCommand.InvokeAsync(inputArgs);
+            await builder.Build().InvokeAsync(inputArgs);
         }
     }
 }

@@ -34,14 +34,16 @@ public class ProcessController : ControllerBase
             return BadRequest(ApiResponse<ProcessIdResponse>.ReturnFailure(
                 result.Errors.Select(x => x.Message).ToList()));
         
-        return Ok(ApiResponse<ProcessIdResponse>.ReturnSuccess(new ProcessIdResponse(result.Value.Id)));
+        return Ok(ApiResponse<ProcessIdResponse>
+            .ReturnSuccess(new ProcessIdResponse(result.Value.Id)));
     }
 
     [HttpGet("{processId:int}")]
     public async Task<ActionResult<ApiResponse<ArchivingStatus>>> CheckProcessStatus([FromRoute] int processId)
     {
         var result = await _mediator.Send(new GetArchivingProgressQuery(processId));
-        return Ok(ApiResponse<ArchivingStatus>.ReturnSuccess(ProcessUtils.ConvertToApiResponse(result)));
+        return Ok(ApiResponse<ArchivingStatus>
+            .ReturnSuccess(ProcessUtils.ConvertToApiResponse(result)));
     }
 
     [HttpGet("download/{processId:int}")]

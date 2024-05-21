@@ -17,9 +17,12 @@ public class FilesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<GetStorageFileModel>>>> GetAllFiles(CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiResponse<List<FileInfoResponse>>>> GetAllFiles(CancellationToken cancellationToken = default)
     {
         var result = await _mediator.Send(new GetStorageFilesQuery(), cancellationToken);
-        return Ok(ApiResponse<List<GetStorageFileModel>>.ReturnSuccess(result));
+        return Ok(ApiResponse<List<FileInfoResponse>>
+            .ReturnSuccess(result
+                .Select(x => new FileInfoResponse(x.Name))
+                .ToList()));
     }
 }

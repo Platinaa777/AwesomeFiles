@@ -9,7 +9,7 @@ namespace af.Utils;
 
 public static class CLICommands
 {
-    public static readonly Command ListCommand = new("list", "Показать список всех файлов");
+    private static readonly Command ListCommand = new("list", "Показать список всех файлов");
 
     private static readonly Command DownloadCommand = new("download", "Скачать архив c id процесса")
     {
@@ -39,51 +39,56 @@ public static class CLICommands
 
     public static void RegisterHandlers(Command rootCommand)
     {
-        ListCommand.Handler = CommandHandler.Create(async () =>
+        ListCommand.Handler = CommandHandler.Create(async (IHttpClientFactory factory) =>
         {
-            using HttpClient client = new HttpClient();
-            var response = await client.GetAsync($"{BaseUrl}/files");
+            using HttpClient client = factory.CreateClient();
+            Console.WriteLine(factory.ToString());
+            var response = await client.GetAsync($"{BaseUrl}{Endpoints.Files}");
         
-            string content = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"GET response status: {response.StatusCode}");
-            Console.WriteLine(content);
+            var content = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"GET endpoint: {Endpoints.Files} response status: {response.StatusCode}");
+            
+            ApiResponseHandler.PrintListResult(response, content);
 
             return response.IsSuccessStatusCode ? 0 : -1;
         });
         
-        CreateArchiveCommand.Handler = CommandHandler.Create<string[]>(async files =>
+        CreateArchiveCommand.Handler = CommandHandler.Create<string[], IHttpClientFactory>(async (files, factory) =>
         {
-            using HttpClient client = new HttpClient();
+            using HttpClient client = factory.CreateClient();
+            
             string jsonData = JsonSerializer.Serialize(new { FileNames = files });
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"{BaseUrl}/process/start", content);
+            var response = await client.PostAsync($"{BaseUrl}{Endpoints.ArchiveStart}", content);
             
             string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"POST request status: {response.StatusCode}");
-            Console.WriteLine(responseContent);
+            
+            Console.WriteLine($"POST endpoint: {Endpoints.ArchiveStart} request status: {response.StatusCode}");
+            ApiResponseHandler.PrintCreateArchiveResult(response, responseContent);
 
             int exitCode = -1;
             if (response.IsSuccessStatusCode)
-                exitCode = (int)JsonConvert.DeserializeObject<ProcessIdResponse>(responseContent)!.Id;
+                exitCode = (int)JsonConvert.DeserializeObject<ApiResponse<ProcessIdResponse>>(responseContent)!.Body!.Id;
 
             return exitCode;
         });
 
-        StatusCommand.Handler = CommandHandler.Create<int>(async taskId =>
+        StatusCommand.Handler = CommandHandler.Create<int, IHttpClientFactory>(async (taskId, factory) =>
         {
-            using HttpClient client = new HttpClient();
+            using HttpClient client = factory.CreateClient();
             var response = await client.GetAsync($"{BaseUrl}/process/{taskId}");
             
             string content = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"GET response status: {response.StatusCode}");
-            Console.WriteLine(content);
+            
+            Console.WriteLine($"GET endpoint: /process/{taskId} response status: {response.StatusCode}");
+            ApiResponseHandler.PrintStatusArchivingResult(response, content);
             
             if (!response.IsSuccessStatusCode)
                 return -1;
             
             string status = "Pending";
             if (response.IsSuccessStatusCode)
-                status = JsonConvert.DeserializeObject<ArchivingStatus>(content)!.Status;
+                status = JsonConvert.DeserializeObject<ApiResponse<ArchivingStatus>>(content)!.Body!.Status;
 
             return status != "Pending" ? taskId : 0;
         });
@@ -93,12 +98,13 @@ public static class CLICommands
             Environment.Exit(0);
         });
 
-        DownloadCommand.Handler = CommandHandler.Create<int, string>(async (taskId, path) =>
+        DownloadCommand.Handler = CommandHandler.Create<int, string, IHttpClientFactory>(async (taskId, path, factory) =>
         {
-            using HttpClient client = new HttpClient();
+            using HttpClient client = factory.CreateClient();
             var response = await client.GetAsync($"{BaseUrl}/process/download/{taskId}");
             
-            Console.WriteLine($"GET response status: {response.StatusCode}");
+            Console.WriteLine($"GET endpoint: /process/download/{taskId} response status: {response.StatusCode}");
+            
             if (response.IsSuccessStatusCode)
             {
                 byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
@@ -106,14 +112,14 @@ public static class CLICommands
                 await File.WriteAllBytesAsync(filePath, fileBytes);
                 Console.WriteLine($"File downloaded successfully to {filePath}");
             }
+            else
+                Console.WriteLine(await response.Content.ReadAsStringAsync());
             
             return response.IsSuccessStatusCode ? taskId : -1;
         });
         
         AutoCheckingCommand.Handler = CommandHandler.Create<string, string[]>(async (path,files ) =>
         {
-            using HttpClient client = new HttpClient();
-
             var processId = await CreateArchiveCommand.InvokeAsync(files);
 
             // Не смогли создать процесс на архивацию
