@@ -56,12 +56,12 @@ public class LocalSystemArchiveService : IArchiveService
         return bytes;
     }
     
-    private void CreateZipFromFiles(string zipFilePath, string[] filePaths)
+    private void CreateZipFromFiles(string zipFilePath, string[] files)
     {
         try
         {
             using var zip = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
-            foreach (var file in filePaths)
+            foreach (var file in files)
                 zip.CreateEntryFromFile(Path.Combine(FileSystemStorageConstants.StorageFolder, file), file);
         }
         catch (Exception)
