@@ -1,4 +1,5 @@
 using AwesomeFiles.Application.Queries.GetStorageFiles;
+using AwesomeFiles.HttpModels.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,9 @@ public class FilesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult> GetAllFiles(CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiResponse<List<GetStorageFileModel>>>> GetAllFiles(CancellationToken cancellationToken = default)
     {
         var result = await _mediator.Send(new GetStorageFilesQuery(), cancellationToken);
-        return Ok(result);
+        return Ok(ApiResponse<List<GetStorageFileModel>>.ReturnSuccess(result));
     }
 }

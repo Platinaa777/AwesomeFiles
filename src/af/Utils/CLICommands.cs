@@ -1,31 +1,38 @@
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
-using System.Net;
 using System.Text;
-using System.Text.Json;
+using AwesomeFiles.HttpModels.Responses;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace af.Utils;
 
 public static class CLICommands
 {
-    public static readonly Command ListCommand = new("list", "List files");
+    public static readonly Command ListCommand = new("list", "Показать список всех файлов");
 
-    private static readonly Command DownloadCommand = new("download", "Download the result of a task to a specified folder")
+    private static readonly Command DownloadCommand = new("download", "Скачать архив c id процесса")
     {
-        new Argument<int>("taskId", "The ID of the task to download"),
-        new Argument<string>("path", "The path to the folder where the file should be downloaded")
+        new Argument<int>("taskId", "Id процесса"),
+        new Argument<string>("path", "Путь куда будет скачан архив")
     };
 
-    private static readonly Command StatusCommand = new("status", "Check the status of a task")
+    private static readonly Command StatusCommand = new("status", "Проверить статус процесса")
     {
-        new Argument<int>("taskId", "The ID of the task to check")
+        new Argument<int>("taskId", "Id процесса который надо проверить на готовность")
     };
 
-    private static readonly Command ExitCommand = new("exit", "Exit the application");
+    private static readonly Command ExitCommand = new("exit", "Выйти с приложения");
 
-    private static readonly Command CreateArchiveCommand = new("create-archive", "Create an archive from specified files")
+    private static readonly Command CreateArchiveCommand = new("create-archive", "Создать архив с введеными файлами")
     {
-        new Argument<string[]>("files", "Files to include in the archive"),
+        new Argument<string[]>("files", "Файлы которые должны быть архивированы")
+    };
+    
+    private static readonly Command AutoCheckingCommand = new("auto-create-archive", "Режим который самостоятельно запрашивает у backend создание архива, опрашивание о его готовности и скачивание (опрос происходит каждые 200ms)")
+    {
+        new Argument<string>("path", "Путь куда будет скачан архив"),
+        new Argument<string[]>("files", "Файлы которые должны быть архивированы")
     };
 
     private const string BaseUrl = "http://localhost:5001";
@@ -40,6 +47,8 @@ public static class CLICommands
             string content = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"GET response status: {response.StatusCode}");
             Console.WriteLine(content);
+
+            return response.IsSuccessStatusCode ? 0 : -1;
         });
         
         CreateArchiveCommand.Handler = CommandHandler.Create<string[]>(async files =>
@@ -52,6 +61,12 @@ public static class CLICommands
             string responseContent = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"POST request status: {response.StatusCode}");
             Console.WriteLine(responseContent);
+
+            int exitCode = -1;
+            if (response.IsSuccessStatusCode)
+                exitCode = (int)JsonConvert.DeserializeObject<ProcessIdResponse>(responseContent)!.Id;
+
+            return exitCode;
         });
 
         StatusCommand.Handler = CommandHandler.Create<int>(async taskId =>
@@ -62,6 +77,15 @@ public static class CLICommands
             string content = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"GET response status: {response.StatusCode}");
             Console.WriteLine(content);
+            
+            if (!response.IsSuccessStatusCode)
+                return -1;
+            
+            string status = "Pending";
+            if (response.IsSuccessStatusCode)
+                status = JsonConvert.DeserializeObject<ArchivingStatus>(content)!.Status;
+
+            return status != "Pending" ? taskId : 0;
         });
 
         ExitCommand.Handler = CommandHandler.Create(() =>
@@ -74,7 +98,6 @@ public static class CLICommands
             using HttpClient client = new HttpClient();
             var response = await client.GetAsync($"{BaseUrl}/process/download/{taskId}");
             
-            string content = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"GET response status: {response.StatusCode}");
             if (response.IsSuccessStatusCode)
             {
@@ -83,6 +106,30 @@ public static class CLICommands
                 await File.WriteAllBytesAsync(filePath, fileBytes);
                 Console.WriteLine($"File downloaded successfully to {filePath}");
             }
+            
+            return response.IsSuccessStatusCode ? taskId : -1;
+        });
+        
+        AutoCheckingCommand.Handler = CommandHandler.Create<string, string[]>(async (path,files ) =>
+        {
+            using HttpClient client = new HttpClient();
+
+            var processId = await CreateArchiveCommand.InvokeAsync(files);
+
+            // Не смогли создать процесс на архивацию
+            if (processId == -1)
+                return;
+
+            var isReady = false;
+            do
+            {
+                var statusCommandExitCode = await StatusCommand.InvokeAsync(new []{ processId.ToString() });
+                if (statusCommandExitCode == processId)
+                    isReady = true;
+                await Task.Delay(200);
+            } while (!isReady);
+        
+            await DownloadCommand.InvokeAsync(new []{ processId.ToString(), path});
         });
         
         rootCommand.AddCommand(ListCommand);        
@@ -90,5 +137,6 @@ public static class CLICommands
         rootCommand.AddCommand(StatusCommand);
         rootCommand.AddCommand(ExitCommand);
         rootCommand.AddCommand(CreateArchiveCommand);
+        rootCommand.AddCommand(AutoCheckingCommand);
     }
 }

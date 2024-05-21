@@ -1,19 +1,9 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/home/denis/.cache/JetBrains/Rider2024.1/resharper-host/temp/Rider/vAny/CoverageData/_AwesomeFiles.-1261684401/Snapshot/snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=73d8cfdb_002Dfe29_002D4939_002D8e1b_002Dacf9992b5709/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="StartArchiveProcessCommandShould" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Commands.StartArchiveProcess.StartArchiveProcessCommandShould&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=633bc085_002Dabb5_002D45d3_002Dbf2e_002D298bc64df545/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cd3b07c3_002D3c8b_002D4c37_002Dacb4_002D533fa44d2fbe/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ReturnFileNotFoundError_WhenAnyFileNotExistInRequest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Commands.StartArchiveProcess.StartArchiveProcessCommandShould&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Queries.DownloadArchive.DownloadArchiveQueryShould&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Queries.GetArchivingProgress.GetArchivingProgressQueryShould&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Queries.GetStorageFiles.GetStorageFilesQueryShould&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Commands.StartArchiveProcess.StartArchiveProcessValidationShould&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Queries.DownloadArchive.DownloadArchiveValidatorShould&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::8A0B4238-9CA7-4308-A577-96BCDF2BD7D0::net7.0::AwesomeFiles.Application.Tests.Queries.GetArchivingProgress.GetArchivingProgressValidatorShould&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
 	<s:String x:Key="/Default/Monitoring/StartMode/@EntryValue">Disabled</s:String></wpf:ResourceDictionary>

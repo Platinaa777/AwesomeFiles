@@ -27,7 +27,7 @@ public class StartArchiveProcessCommandShould
     {
         string notExistFile = "file2";
         _archiveServiceMock.Setup(x => x.CheckAllFilesExists(_requestFiles))
-            .Returns(Result.Failure(FileError.AddFileNotExistsError(notExistFile)));
+            .Returns(Result.Failure(FileError.FileNotExistsError(notExistFile)));
 
         var result = await _handler.Handle(_command, CancellationToken.None);
 
@@ -41,7 +41,7 @@ public class StartArchiveProcessCommandShould
         string notExistFile1 = "file1";
         string notExistsFile2 = "file2";
         _archiveServiceMock.Setup(x => x.CheckAllFilesExists(_requestFiles))
-            .Returns(Result.Failure(FileError.AddFileNotExistsError(notExistFile1), FileError.AddFileNotExistsError(notExistsFile2)));
+            .Returns(Result.Failure(FileError.FileNotExistsError(notExistFile1), FileError.FileNotExistsError(notExistsFile2)));
 
         var result = await _handler.Handle(_command, CancellationToken.None);
 

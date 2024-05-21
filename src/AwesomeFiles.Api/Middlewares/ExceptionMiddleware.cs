@@ -1,5 +1,6 @@
 using System.Net;
 using AwesomeFiles.Domain.Exceptions;
+using FluentValidation;
 using Newtonsoft.Json;
 
 namespace AwesomeFiles.Api.Middlewares;
@@ -21,6 +22,9 @@ public class ExceptionMiddleware : AbstractExceptionHandlerMiddleware
                 break;
             case ArchiveNotFoundException:
                 code = HttpStatusCode.NotFound;
+                break;
+            case ValidationException:
+                code = HttpStatusCode.BadRequest;
                 break;
             default:
                 code = HttpStatusCode.InternalServerError;

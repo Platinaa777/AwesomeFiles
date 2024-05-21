@@ -4,10 +4,9 @@ using AwesomeFiles.Application.Commands.StartArchiveProcess;
 using AwesomeFiles.Application.Queries.DownloadArchive;
 using AwesomeFiles.Application.Queries.GetArchivingProgress;
 using AwesomeFiles.HttpModels.Requests;
+using AwesomeFiles.HttpModels.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using static AwesomeFiles.Api.Enums.ProcessStatus;
 
 namespace AwesomeFiles.Api.Controllers;
 
@@ -27,19 +26,22 @@ public class ProcessController : ControllerBase
     }
 
     [HttpPost("start")]
-    public async Task<ActionResult> StartArchivingFiles([FromBody] ListArchiveFiles fileNames, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiResponse<ProcessIdResponse>>> StartArchivingFiles([FromBody] ListArchiveFiles fileNames, CancellationToken cancellationToken = default)
     {
         var result = await _mediator.Send(_mapper.Map<StartArchiveProcessCommand>(fileNames), cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(ApiResponse<ProcessIdResponse>.ReturnFailure(
+                result.Errors.Select(x => x.Message).ToList()));
         
-        return Ok(result);
+        return Ok(ApiResponse<ProcessIdResponse>.ReturnSuccess(new ProcessIdResponse(result.Value.Id)));
     }
 
     [HttpGet("{processId:int}")]
-    public async Task<ActionResult> CheckProcessStatus([FromRoute] int processId)
+    public async Task<ActionResult<ApiResponse<ArchivingStatus>>> CheckProcessStatus([FromRoute] int processId)
     {
         var result = await _mediator.Send(new GetArchivingProgressQuery(processId));
-        
-        return Ok(result ? Completed.ToString() : Pending.ToString());
+        return Ok(ApiResponse<ArchivingStatus>.ReturnSuccess(ProcessUtils.ConvertToApiResponse(result)));
     }
 
     [HttpGet("download/{processId:int}")]
@@ -48,7 +50,7 @@ public class ProcessController : ControllerBase
         var result = await _mediator.Send(new DownloadArchiveQuery(processId));
 
         if (!result.IsReady)
-            return BadRequest(Pending.ToString());
+            return BadRequest(ProcessUtils.ConvertToApiResponse(false));
         
         return File(result.ZipBytes, "application/zip", $"archive-{processId}");
     }

@@ -21,7 +21,7 @@ public class LocalSystemArchiveService : IArchiveService
             foreach (var file in files)
             {
                 if (!File.Exists(Path.Combine(FileSystemStorageConstants.StorageFolder, file)))
-                    errors.Add(FileError.AddFileNotExistsError(file));
+                    errors.Add(FileError.FileNotExistsError(file));
             }
         }
         catch { /* ignored */ }
@@ -36,6 +36,7 @@ public class LocalSystemArchiveService : IArchiveService
         // Запуск асинхронной архивации файлов
         var task = Task.Run(() =>
         {
+            Thread.Sleep(5000);
             var curArchiveFolder = Path.Combine(FileSystemStorageConstants.ArchiveFolder, $"archive-{processId}");
             var zipFile = curArchiveFolder + ".zip";
             // Запуск архивации файлов
