@@ -13,7 +13,7 @@ public interface IArchiveService
     /// Проверка на то что все файлы существуют на устройстве
     /// </summary>
     /// <returns></returns>
-    Result CheckAllFilesExists(List<string> files);
+    Result CheckAllFilesExist(List<string> files);
     /// <summary>
     /// Запус архивации
     /// </summary>
@@ -22,7 +22,7 @@ public interface IArchiveService
     ArchiveTask LaunchArchiving(List<string> existingFiles);
 
     /// <summary>
-    /// Скачивание из архива и возвращение потока
+    /// Скачивание из архива и возвращение массива байт
     /// </summary>
     /// <param name="processId"></param>
     /// <returns></returns>

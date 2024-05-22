@@ -1,7 +1,7 @@
 using FluentValidation;
 using MediatR;
 
-namespace AwesomeFiles.Application.Behavior;
+namespace AwesomeFiles.Application.Behaviors;
 
 public class ValidationPipelineBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>

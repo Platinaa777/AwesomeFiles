@@ -26,28 +26,43 @@ public class ProcessController : ControllerBase
     }
 
     [HttpPost("start")]
-    public async Task<ActionResult<ApiResponse<ProcessIdResponse>>> StartArchivingFiles([FromBody] ListArchiveFiles fileNames, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiResponse<ProcessIdResponse>>> StartArchivingFiles(
+        [FromBody] ListArchiveFiles fileNames,
+        CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(_mapper.Map<StartArchiveProcessCommand>(fileNames), cancellationToken);
+        var result = await _mediator.Send(_mapper.Map<StartArchiveProcessCommand>(fileNames),
+            cancellationToken);
 
         if (result.IsFailure)
-            return BadRequest(ApiResponse<ProcessIdResponse>.ReturnFailure(
-                result.Errors.Select(x => x.Message).ToList()));
+        {
+            var errorMessages = result.Errors
+                .Select(x => x.Message)
+                .ToList();
+            
+            var response = ApiResponse<ProcessIdResponse>
+                .ReturnFailure(errorMessages);
+            
+            return BadRequest(response);
+        }
         
-        return Ok(ApiResponse<ProcessIdResponse>
-            .ReturnSuccess(new ProcessIdResponse(result.Value.Id)));
+        var responseValue = new ProcessIdResponse(result.Value.Id);
+        
+        return Ok(ApiResponse<ProcessIdResponse>.ReturnSuccess(responseValue));
     }
 
     [HttpGet("{processId:int}")]
-    public async Task<ActionResult<ApiResponse<ArchivingStatus>>> CheckProcessStatus([FromRoute] int processId)
+    public async Task<ActionResult<ApiResponse<ArchivingStatus>>> CheckProcessStatus(
+        [FromRoute] int processId)
     {
         var result = await _mediator.Send(new GetArchivingProgressQuery(processId));
-        return Ok(ApiResponse<ArchivingStatus>
-            .ReturnSuccess(ProcessUtils.ConvertToApiResponse(result)));
+
+        var convertedResponse = ProcessUtils.ConvertToApiResponse(result);
+        return Ok(ApiResponse<ArchivingStatus>.ReturnSuccess(convertedResponse));
     }
 
     [HttpGet("download/{processId:int}")]
-    public async Task<ActionResult> DownloadArchivedFiles([FromRoute] int processId)
+    public async Task<ActionResult> DownloadArchivedFiles(
+        [FromRoute] int processId)
     {
         var result = await _mediator.Send(new DownloadArchiveQuery(processId));
 

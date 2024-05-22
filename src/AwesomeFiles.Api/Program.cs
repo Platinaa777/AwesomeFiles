@@ -11,11 +11,11 @@ builder.Services
 
 builder.Services
     .AddApiLogging(configuration)
-    .AddApplicationServices()
+    .AddApplicationServices(configuration)
     .AddCustomMiddlewares()
-    .AddCaching();
+    .AddCaching(configuration);
 
-builder.ConfigureArchiveStorage();
+builder.ConfigureArchiveStorage(configuration);
 
 var app = builder.Build();
 

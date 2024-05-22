@@ -4,23 +4,30 @@ using AwesomeFiles.Application.Services.Models;
 using AwesomeFiles.Domain.Errors;
 using AwesomeFiles.Domain.Exceptions;
 using AwesomeFiles.Domain.ResultAbstractions;
-using AwesomeFiles.Infrastructure.Constants;
+using AwesomeFiles.Infrastructure.Options;
 using ZipFile = System.IO.Compression.ZipFile;
 
 namespace AwesomeFiles.Infrastructure.Services;
 
 public class LocalSystemArchiveService : IArchiveService
 {
+    private readonly FileSystemStorageOptions _fileSystemStorageOptions;
     private static long _counter;
+
+    public LocalSystemArchiveService(
+        FileSystemStorageOptions fileSystemStorageOptions )
+    {
+        _fileSystemStorageOptions = fileSystemStorageOptions;
+    }
     
-    public Result CheckAllFilesExists(List<string> files)
+    public Result CheckAllFilesExist(List<string> files)
     {
         List<Error> errors = new();
         try
         {
             foreach (var file in files)
             {
-                if (!File.Exists(Path.Combine(FileSystemStorageConstants.StorageFolder, file)))
+                if (!File.Exists(Path.Combine(_fileSystemStorageOptions.StorageFolder, file)))
                     errors.Add(FileError.FileNotExistsError(file));
             }
         }
@@ -36,8 +43,7 @@ public class LocalSystemArchiveService : IArchiveService
         // Запуск асинхронной архивации файлов
         var task = Task.Run(() =>
         {
-            Thread.Sleep(5000);
-            var curArchiveFolder = Path.Combine(FileSystemStorageConstants.ArchiveFolder, $"archive-{processId}");
+            var curArchiveFolder = Path.Combine(_fileSystemStorageOptions.ArchiveFolder, $"archive-{processId}");
             var zipFile = curArchiveFolder + ".zip";
             // Запуск архивации файлов
             CreateZipFromFiles(zipFile, existingFiles.ToArray());
@@ -48,7 +54,7 @@ public class LocalSystemArchiveService : IArchiveService
 
     public async Task<byte[]> DownloadArchiveAsync(long processId)
     {
-        var archivePath = Path.Combine(FileSystemStorageConstants.ArchiveFolder, $"archive-{processId}.zip");
+        var archivePath = Path.Combine(_fileSystemStorageOptions.ArchiveFolder, $"archive-{processId}.zip");
         if (!File.Exists(archivePath))
             throw new ArchiveNotFoundException($"Архив с названием {processId} не был найден");
         
@@ -62,7 +68,9 @@ public class LocalSystemArchiveService : IArchiveService
         {
             using var zip = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
             foreach (var file in files)
-                zip.CreateEntryFromFile(Path.Combine(FileSystemStorageConstants.StorageFolder, file), file);
+                zip.CreateEntryFromFile(
+                    sourceFileName: Path.Combine(_fileSystemStorageOptions.StorageFolder, file),
+                    entryName: file);
         }
         catch (Exception)
         {

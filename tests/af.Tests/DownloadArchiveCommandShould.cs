@@ -29,7 +29,7 @@ public class DownloadArchiveCommandShould
         _messageHandlerMock.When(Url).Respond(HttpStatusCode.BadRequest, JsonContent.Create(new {
             errorMessage = $"Архив с id: {Id} не был найден"
         }));
-
+        
         var exitCode = await _command.InvokeAsync(new[] { Id, "PATH" });
 
         exitCode.Should().Be(-1);

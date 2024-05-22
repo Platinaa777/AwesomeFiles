@@ -26,7 +26,7 @@ public class StartArchiveProcessCommandShould
     public async Task ReturnOneFileNotFoundError_WhenAnyFileNotExist()
     {
         string notExistFile = "file2";
-        _archiveServiceMock.Setup(x => x.CheckAllFilesExists(_requestFiles))
+        _archiveServiceMock.Setup(x => x.CheckAllFilesExist(_requestFiles))
             .Returns(Result.Failure(FileError.FileNotExistsError(notExistFile)));
 
         var result = await _handler.Handle(_command, CancellationToken.None);
@@ -40,7 +40,7 @@ public class StartArchiveProcessCommandShould
     {
         string notExistFile1 = "file1";
         string notExistsFile2 = "file2";
-        _archiveServiceMock.Setup(x => x.CheckAllFilesExists(_requestFiles))
+        _archiveServiceMock.Setup(x => x.CheckAllFilesExist(_requestFiles))
             .Returns(Result.Failure(FileError.FileNotExistsError(notExistFile1), FileError.FileNotExistsError(notExistsFile2)));
 
         var result = await _handler.Handle(_command, CancellationToken.None);
@@ -53,7 +53,7 @@ public class StartArchiveProcessCommandShould
     [Fact]
     public async Task ReturnSuccess_WhenAllFilesInStorage()
     {
-        _archiveServiceMock.Setup(x => x.CheckAllFilesExists(_requestFiles))
+        _archiveServiceMock.Setup(x => x.CheckAllFilesExist(_requestFiles))
             .Returns(Result.Success);
         _archiveServiceMock.Setup(x => x.LaunchArchiving(_requestFiles))
             .Returns(new ArchiveTask { ProcessId = 1, WorkItem = Task.CompletedTask });
@@ -70,7 +70,7 @@ public class StartArchiveProcessCommandShould
         var workItem = Task.CompletedTask;
         var id = 1;
         
-        _archiveServiceMock.Setup(x => x.CheckAllFilesExists(_requestFiles))
+        _archiveServiceMock.Setup(x => x.CheckAllFilesExist(_requestFiles))
             .Returns(Result.Success);
         _archiveServiceMock.Setup(x => x.LaunchArchiving(_requestFiles))
             .Returns(new ArchiveTask { ProcessId = id, WorkItem = workItem });

@@ -10,13 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.Domain", "src\AwesomeFiles.Domain\AwesomeFiles.Domain.csproj", "{C2B68FF4-219E-4CCF-ABF5-FCBA53A4BC82}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{200B5A62-FCE2-4C36-9C68-F4A3F9ED3C13}"
-	ProjectSection(SolutionItems) = preProject
-		archive\archive-1.zip = archive\archive-1.zip
-		storage\file2 = storage\file2
-		storage\file1 = storage\file1
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FD38E165-DA08-4061-AFD6-9D4E38611D3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2D80653E-51E6-4091-B27D-593296AD88A0}"
@@ -31,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{FA49B802-5C4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "af", "src\af\af.csproj", "{35C9157A-06AC-4165-8B0D-D54B41FD3457}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeFiles.CLI.Tests", "tests\AwesomeFiles.CLI.Tests\AwesomeFiles.CLI.Tests.csproj", "{0A1DB885-8EFF-4E0F-A966-BDF53B577235}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "af.Tests", "tests\af.Tests\af.Tests.csproj", "{0A1DB885-8EFF-4E0F-A966-BDF53B577235}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

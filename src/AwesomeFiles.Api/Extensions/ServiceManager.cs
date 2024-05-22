@@ -1,17 +1,20 @@
 using System.Reflection;
 using AwesomeFiles.Api.Middlewares;
 using AwesomeFiles.Application.AssemblyInfo;
-using AwesomeFiles.Application.Behavior;
+using AwesomeFiles.Application.Behaviors;
+using AwesomeFiles.Application.Cache;
 using AwesomeFiles.Application.Commands.StartArchiveProcess;
 using AwesomeFiles.Application.Models;
 using AwesomeFiles.Application.Queries.DownloadArchive;
 using AwesomeFiles.Application.Services;
 using AwesomeFiles.Domain.Models.ArchiveFileModel.Repos;
 using AwesomeFiles.Domain.Models.WorkingProcessModel.Repos;
+using AwesomeFiles.Infrastructure.Options;
 using AwesomeFiles.Infrastructure.Repositories;
 using AwesomeFiles.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Options;
 using NpgsqlTypes;
 using Serilog;
 using Serilog.Events;
@@ -45,7 +48,8 @@ public static class ServiceManager
     }
    
 
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddControllers();
         
@@ -71,21 +75,32 @@ public static class ServiceManager
         services
             .AddScoped<IArchiveService, LocalSystemArchiveService>();
         
+        services.Configure<FileSystemStorageOptions>(
+            configuration.GetSection("FileSystemStorageOptions"));
+        services.AddSingleton<FileSystemStorageOptions>(
+            sp => sp.GetRequiredService<IOptions<FileSystemStorageOptions>>().Value);
+        
         return services;
     }
 
-    public static WebApplicationBuilder ConfigureArchiveStorage(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder ConfigureArchiveStorage(this WebApplicationBuilder builder,
+        IConfiguration configuration)
     {
+        string storageFolder = configuration["FileSystemStorageOptions:StorageFolder"] 
+                               ?? throw new Exception("Не зарегистрирована папка чудесных файлов");
+        string archiveFolder = configuration["FileSystemStorageOptions:ArchiveFolder"] 
+                               ?? throw new Exception("Не зарегистрирована архив папка");
+        
         // Проверка на хранение файлов в хранилище правда, из условия я так понимаю оно всегда должно быть создано уже 
         // с заранее заготовленными файлами, но оставлю как есть
-        if (!Directory.Exists("../../storage"))
-            Directory.CreateDirectory("../../storage");
+        if (!Directory.Exists(storageFolder))
+            Directory.CreateDirectory(storageFolder);
         
         // Создание хранилища архивов c нуля (как указано в задании)
-        if (Directory.Exists("../../archive"))
+        if (Directory.Exists(archiveFolder))
         {
-            Directory.Delete("../../archive", recursive: true);
-            Directory.CreateDirectory("../../archive");
+            Directory.Delete(archiveFolder, recursive: true);
+            Directory.CreateDirectory(archiveFolder);
         }
 
         return builder;
@@ -100,10 +115,16 @@ public static class ServiceManager
         return services;
     }
     
-    public static IServiceCollection AddCaching(this IServiceCollection services)
+    public static IServiceCollection AddCaching(this IServiceCollection services,
+        IConfiguration configuration)
     {
         // Решил что буду использовать in memory кеш, использование редиса все-таки здесь не слишком оправдано
         services.AddMemoryCache();
+        
+        services.Configure<CacheOptions>(
+            configuration.GetSection("CacheOptions"));
+        services.AddSingleton<CacheOptions>(
+            sp => sp.GetRequiredService<IOptions<CacheOptions>>().Value);
         
         return services;
     }

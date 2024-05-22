@@ -23,7 +23,7 @@ public class StartArchiveProcessCommandHandler
     public Task<Result<ProcessId>> Handle(StartArchiveProcessCommand request, CancellationToken cancellationToken)
     {
         // Проверяем что файлы все существуют в системе
-        var result = _archiveService.CheckAllFilesExists(request.Files);
+        var result = _archiveService.CheckAllFilesExist(request.Files);
         if (result.IsFailure)
             return Task.FromResult(Result.Failure<ProcessId>(result.Errors.ToArray()));
 

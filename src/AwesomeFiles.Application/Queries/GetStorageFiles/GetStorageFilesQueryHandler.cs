@@ -15,6 +15,8 @@ public class GetStorageFilesQueryHandler
     }
 
     public Task<List<GetStorageFileModel>> Handle(GetStorageFilesQuery request, CancellationToken cancellationToken)
-        => Task.FromResult(_fileRepository.GetAllFiles()
-            .Select(x => new GetStorageFileModel(x.Name)).ToList());
+        => Task.FromResult(
+            _fileRepository.GetAllFiles()
+            .Select(x => new GetStorageFileModel(x.Name))
+            .ToList());
 }
