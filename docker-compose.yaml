@@ -31,6 +31,8 @@ services:
     networks: [ kaspersky ]
     volumes:
       - ./storage/files/:/storage/files/
+    depends_on:
+      - postgres_db
 
 volumes:
   kaspersky:

@@ -6,35 +6,35 @@ Github: _https://github.com/Platinaa777
 
 ## Структура проекта
 
-```bash
-├── src                                 # Основной код проекта
+```
+├── src                                  # Основной код проекта
 │   ├── af                               # Утилита к backend сервису
 |   |
-│   ├── AwesomeFiles.Api                 # Api приложения (регистрация DI, определение endpoints, 
+│   ├── AwesomeFiles.Api                 # Api приложения (регистрация DI, определение endpoints,
 |   |                                    # middlewares)
 |   |
-│   ├── AwesomeFiles.Application         # Здесь собраны различные команды и запросы с использованием 
+│   ├── AwesomeFiles.Application         # Здесь собраны различные команды и запросы с использованием
 |   |                                    # паттерна проектирования Посредник (Mediator)
 |   |                                    # Кеширование происходит на этом уровне в папке Behaviors
 |   |
 │   ├── AwesomeFiles.Domain              # Домен приложения
-|   | 
+|   |
 │   ├── AwesomeFiles.HttpModels          # HTTP модели
 |   |
 │   └── AwesomeFiles.Infrastructure      # Реализации репозиториев и доменных сервисов
 |
 ├── storage                              # Хранилище
 │   ├── archives                         # Здесь хранятся архивы, которые создаются приложением
-│   │   ├── archive-1.zip
+│   │   ├── archive-1.zip                # папка каждый раз чистится при запуске приложения
 │   │   └── archive-2.zip
 │   └── files                            # Папка с чудесными файлами
 │       ├── file1
-│       ├── file2
-│       └── init-folder
+│       └── file2
+│     
 └── tests                                # Папка с тестами
-    ├── af.Tests                         # Тесты для утилиты
-    ├── AwesomeFiles.Api.Tests           # Тесты для Api
-    └── AwesomeFiles.Application.Tests   # Тесты для Application
+├── af.Tests                             # Тесты для утилиты
+├── AwesomeFiles.Api.Tests               # Тесты для Api
+└── AwesomeFiles.Application.Tests       # Тесты для Application
 ```
 
 # Утилита af (Приложение 2)
@@ -44,10 +44,7 @@ Github: _https://github.com/Platinaa777
 ## Запуск:
 
 ```cs
-dotnet af.dll # нужно находиться в src/af/bin/Debug/net7.0
 dotnet run    # нужно находиться в src/af
-
-# Можете использовать любой вариант, как Вам удобнее
 ```
 
 ## Описание:
@@ -198,7 +195,13 @@ POST endpoint: /process/start request status: BadRequest
 
 # Backend сервис (Приложение 1)
 
-## Swagger 
+## Запуск
+
+```docker
+docker-compose up  # находится надо в корне проекта
+```
+
+## Swagger
 
 ![1716387797870](images/README/1716387797870.png)
 
@@ -213,7 +216,7 @@ endpoins:
 
 ## Логирование
 
-Логирую в консоль и в базу данных с помощью Serilog и PostgreSQL провайдера
+Логирую в консоль и в базу данных с помощью Serilog (для бд - Serilog.Sinks.PostreSQL)
 
 ### Примеры:
 
@@ -254,3 +257,11 @@ public async Task<CompletedArchive> Handle(DownloadArchiveQuery request, Request
         return result;
     }
 ```
+
+## Тесты
+
+Тесты находятся в папке tests
+
+## Примечания
+
+Выполнил все поставленные задачи, а также все задачи со звездочкой.
