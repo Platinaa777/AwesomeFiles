@@ -102,6 +102,10 @@ public static class ServiceManager
             Directory.Delete(archiveFolder, recursive: true);
             Directory.CreateDirectory(archiveFolder);
         }
+        else
+        {
+            Directory.CreateDirectory(archiveFolder);
+        }
 
         return builder;
     }

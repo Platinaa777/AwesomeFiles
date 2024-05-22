@@ -234,13 +234,12 @@ endpoins:
 ```csharp
 public async Task<CompletedArchive> Handle(DownloadArchiveQuery request, RequestHandlerDelegate<CompletedArchive> next, CancellationToken cancellationToken)
     {
-        // если у нас уже находится в кеше архив, то вернем его
         if (_memoryCache.TryGetValue(request.ProcessId.ToString(), out var archiveBytes)
             && archiveBytes is byte[] bytes)
         {
             _logger.LogInformation("Archive with id: {@Id} was retrieved from the cache",
                 request.ProcessId);
-        
+  
             return new CompletedArchive(bytes, true);
         }
 

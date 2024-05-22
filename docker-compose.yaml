@@ -17,6 +17,20 @@ services:
     networks: [ kaspersky ]
     volumes:
       - kaspersky:/var/lib/postgresql/data
+    
+  awesome_app:
+    container_name: awesome_app
+    image: platinaa777/af-app:01
+    ports:
+      - '5001:80'
+    environment:
+      FileSystemStorageOptions__StorageFolder: /storage/files/
+      FileSystemStorageOptions__ArchiveFolder: /storage/archives/
+      ConnectionStrings__Logs: User ID=denis;password=denis123;port=5432;host=postgres_db;database=logs_db
+      DOCKER_RUNNING: 'true'
+    networks: [ kaspersky ]
+    volumes:
+      - ./storage/files/:/storage/files/
 
 volumes:
   kaspersky:

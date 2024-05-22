@@ -18,8 +18,9 @@ builder.Services
 builder.ConfigureArchiveStorage(configuration);
 
 var app = builder.Build();
+var dockerRunning = app.Configuration["DOCKER_RUNNING"];
 
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("DOCKER_RUNNING"))
+if (app.Environment.IsDevelopment() || !string.IsNullOrEmpty(dockerRunning))
 {
     app.UseSwagger();
     app.UseSwaggerUI();

@@ -1,0 +1,7 @@
+
+images/
+.idea/
+**/bin/
+**/obj/
+.git/
+README.md
